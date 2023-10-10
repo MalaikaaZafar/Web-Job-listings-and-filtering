@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script>
+    $(document).ready(
+      function()
+      {
+        var filterArray=[]
+        function filter(selectedFilter) {
+        if (!filterArray.includes(selectedFilter))
+        {
+          filterArray.push(selectedFilter)
+        }
+        var jobs = $(".jobCard");
+        jobs.each(function () {
+        var check = false;
+        var thisElement = $(this);
+if (!thisElement.is(":hidden"))
+{
+  if (thisElement.data('role') === selectedFilter || thisElement.data('level') === selectedFilter) {
+      thisElement.css("display", "flex");
+      check = true;
+    } else {
+      var lang = thisElement.data('languages');
+      var tools = thisElement.data('tools');
+
+      if (lang && lang.split(' ').includes(selectedFilter)) {
+        thisElement.css("display", "flex");
+        check = true;
+      }
+
+      if (tools && tools.split(' ').includes(selectedFilter)) {
+        thisElement.css("display", "flex");
+        check = true;
+      }
+}
+   
+    }
+
+    if (!check) {
+      if (thisElement.css("display")!=="none")
+        {thisElement.css("display", "none");}
+    }
+  });
+}
+        function reverseFilter(thisText)
+        {
+          var jobs=$(".jobCard")
+          jobs.each(function(){
+            var current=$(this)
+            if (current.css("display")=="none")
+              current.css("display",  "flex")
+          })
+          filterArray.pop(thisText)
+          filterArray.forEach(element=>{
+            filter(element)
+          })
+        }
+        
+        
+
+        $(".req li").click(function(){
+          var thisText = $(this).text();
+          if ($("#searchBar").is(":hidden"))
+          {
+            $("#searchBar").css("display", "flex");
+            $("#searchBar").append(`<div class='searchItems'><p>${thisText}</p><div class='remove'><img src='images/icon-remove.svg'></div>`)
+          }
+          else 
+          {
+            $("#searchBar").append(`<div class='searchItems'><p>${thisText}</p><div class='remove'><img src='images/icon-remove.svg'></div>`)
+          }
+          filter(thisText);
+        });
+
+        $("#searchBar").on("click", ".searchItems .remove", function() {
+        var thisText = $(this).parent(".searchItems p").text();
+        $(this).parent(".searchItems").remove();
+        if ($(".searchItems").length===0)
+        {
+          $("#searchBar").css("display", "none")
+        }
+        reverseFilter(thisText)
+        });
+
+        $(".pos").click(function()
+        {
+          if ($("#jobInfoPopup").css("display")=="none")
+          {
+            $("#jobInfoPopup").css("display", "flex")
+          }
+          var thisElement=$(this).parent(".left")
+          thisElement=thisElement.parent(".jobCard")
+          var img=thisElement.find(".img img").attr('src')
+          var htmlString=`<div class="jobinformation"><table><tr colspan="2"><td><img src=${img}></td><td><h2>${thisElement.find(".left .top .org").text()}</h2></td></tr>`+
+            `<tr><td><h2>Title</h2></td><td><h2>${thisElement.find(".left .pos p").text()}</h2></td></tr>`+
+            `<tr><td><h2>Role</h2></td><td><h2>${thisElement.data("role")}</h2></td></tr>`+
+            `<tr><td><h2>Level</h2></td><td><h2>${thisElement.data("level")}</h2></td></tr>`
+            var arrayElements=thisElement.data("languages").split(' ')
+            htmlString+=`<tr><td><h2>languages</h2></td><td><ul>`
+            arrayElements.forEach(element=>{
+            htmlString+=`<li><h3>${element}</h3></li>`
+            })
+          htmlString+=`</ul></td></tr>`
+          
+          var arrayElements=thisElement.data("tools")
+          if (arrayElements)
+          {
+            arrayElements=arrayElements.split(' ')
+            var count=arrayElements.length
+            htmlString+=`<tr><td><h2>Tools</h2></td><td><ul>`
+            arrayElements.forEach(element=>
+            {
+              htmlString+=`<li><h3>${element}</h3></li>`
+            })
+          }
+          htmlString+=`</ul></td></tr></table><h2>Job Description</h2><p>We are an innovative and dynamic company specializing in [describe the industry or focus of the company, e.g., photography, image sharing, etc.]. We are dedicated to providing cutting-edge solutions to [describe the company's mission or goals, e.g., enhance photo sharing experiences, create stunning visual content, etc.]. With a team of passionate professionals, we have been at the forefront of the industry, pushing the boundaries of what's possible.</p></div><div class="removePopup"><img src="images/icon-remove.svg" ></div>`
+          $("#jobInfoPopup").append(htmlString)
+        })
+        $("#jobInfoPopup").on("click", ".removePopup", function() {
+        $(this).parent("#jobInfoPopup").children().remove();
+        });
+
+        $(".addJobForm form #submitButton").click(function(event) {
+          event.preventDefault()
+        var formElement = $(this).parent("form");
+        var orgName = formElement.find("input#orgName").val();
+        var title = formElement.find("input#jobTitle").val();
+        var type = formElement.find("select#jobType").val();
+        var role = formElement.find("select#role").val();
+        var level=formElement.find("select#level").val();
+        var checkedBoxeslang=formElement.find("input#lang:checked")
+        var languages;
+        checkedBoxeslang.each(
+         function(){
+            languages+=$(this).val()+" "
+          }
+        )
+        var dataTools
+        var checkedBoxes=formElement.find("input#tools:checked")
+        checkedBoxes.each(
+         function(){
+            dataTools+=$(this).val()+" "
+          }
+        )
+        var htmlString=` <div class="jobCard" data-role=${role} data-level=${level} data-languages=${languages} data-tools=${dataTools}>
+      <div class="img">
+        <img src="images/logoipsum-296.svg" alt ="ManageSVG">
+      </div>
+      <div class="left">
+        <div class="top">
+          <p class="org" >${orgName}</p>
+          <p class="newFeatured" style="background-color: hsl(180, 29%, 50%);">NEW!</p>
+        </div>
+        <div class="pos">
+          <p><b>${title}</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">Now</li>
+          <li>${type}</li>
+          <li>Worldwide</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>${role}</li>
+          <li>${level}</li>`
+           checkedBoxeslang.each(
+           function(){
+              htmlString+=`<li>${$(this).val()}</li>`
+            })
+            checkedBoxes.each(
+              function(){
+              htmlString+=`<li>${$(this).val()}</li>`
+            })
+            htmlString+=`</ul> </div>`
+            $('.new').before(htmlString);
+              formElement.find("input#orgName").val("");
+              formElement.find("input#jobTitle").val("");
+              formElement.find("input#jobType").val("");
+              formElement.find("select#role").val("Frontend");
+              formElement.find("select#jobType").val("Full Time");
+              formElement.find("select#level").val("Junior");
+              checkedBoxeslang.each(
+              function(){
+                  $(this).prop("checked", "false")
+                }
+              )
+              checkedBoxes.each(
+              function(){
+                  dataTools+=$(this).prop("checked", "false")
+                }
+              ) 
+              formElement.parent(".addJobForm").remove();
+            }
+      );
+            $(".addNewJob").click(
+              function()
+              {
+                $(".addJobForm").css("display", "flex")
+              })
+
+            $(".removeForm").click(function()
+            {
+              $(this).parent(".addJobForm").remove();
+            })
+
+            $(".removeJob").click(function(){
+              $(this).parent(".jobCard").remove();
+            })
+        })
+      
+  </script>
+  <title>Frontend Mentor | Job Listings</title>
+  <link rel="stylesheet" href="indexStyle.css">
+  <link rel="stylesheet" href="https://fonts.google.com/specimen/League+Spartan">
+  <style>
+    .attribution { font-size: 11px; text-align: center; }
+    .attribution a { color: hsl(228, 45%, 44%); }
+  </style>
+</head>
+<header></header>
+<body>
+  </div>
+  <div id="searchBar"></div>
+  </div>
+    <div class="jobCard featured" data-role="Frontend" data-level="Senior" data-languages="HTML CSS javascript">
+      <div class="img">
+        <img src="images/photosnap.svg" alt ="ManageSVG">
+      </div>
+      <div class="left">
+        <div class="top">
+          <p class="org">PhotoSnap</p>
+          <p class="newFeatured" style="background-color: hsl(180, 29%, 50%);">NEW!</p>
+          <p class="newFeatured" style="background-color: hsl(180, 14%, 20%);">FEATURED</p>
+        </div>
+        <div class="pos">
+          <p><b>Senior Frontend Developer</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">1d ago</li>
+          <li>Full Time</li>
+          <li> USA only</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>Frontend</li>
+          <li>Senior</li>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+        </ul>
+        <div class="removeJob"><img src="images/icon-remove.svg"></div>
+    </div>
+    
+    <div class="jobCard featured" data-role="FullStack" data-level="Midweight" data-languages="Python" data-tools="React">
+      <div class="img">
+        <img src="images/manage.svg" alt ="ManageSVG">
+      </div>
+      <div class="left">
+        <div class="top">
+          <p class="org" >Manage</p>
+          <p class="newFeatured" style="background-color: hsl(180, 29%, 50%);">NEW!</p>
+          <p class="newFeatured" style="background-color: hsl(180, 14%, 20%);">FEATURED</p>
+        </div>
+        <div class="pos">
+          <p><b>FullStack Developer</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">1d ago</li>
+          <li>Part Time</li>
+          <li>Remote</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>FullStack</li>
+          <li>Midweight</li>
+          <li>Python</li>
+          <li>React</li>
+        </ul>
+        <div class='removeJob'><img src='images/icon-remove.svg'></div>
+    </div>
+    <div class="jobCard new" data-role="Frontend" data-level="Junior" data-languages="Javascript" data-tools="Sass React">
+      <div class="img">
+        <img src="images/account.svg" alt ="ManageSVG">
+      </div>
+      <div class="left">
+        <div class="top">
+          <p class="org" >Account</p>
+          <p class="newFeatured" style="background-color: hsl(180, 29%, 50%);">NEW!</p>
+        </div>
+        <div class="pos">
+          <p><b>Junior Frontend Developer</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">2d ago</li>
+          <li>Part Time</li>
+          <li>USA only</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>Frontend</li>
+          <li>Junior</li>
+          <li>React</li>
+          <li>Sass</li>
+          <li>JavaScript</li>
+        </ul>
+        <div class='removeJob'><img src='images/icon-remove.svg'></div>
+    </div>
+    <div class="jobCard" data-role="Frontend" data-level="Junior" data-languages="Ruby" data-tools="RoR">
+      <div class="img">
+        <img src="images/loop-studios.svg" alt ="ManageSVG">
+      </div>
+      <div class="left">
+        <div class="top">
+          <p class="org" >MyHome</p>
+        </div>
+        <div class="pos">
+          <p><b>Junior Frontend Developer</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">5d ago</li>
+          <li>Contract</li>
+          <li>USA only</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>Frontend</li>
+          <li>Junior</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+        </ul>
+        <div class="removeJob"><img src="images/icon-remove.svg"></div>
+    </div>
+    <div class="jobCard" data-role="Backend" data-level="Junior" data-languages="Ruby" data-tools="RoR">
+      <div class="img">
+        <img src="images/faceit.svg" alt ="ManageSVG">
+      </div>
+      <div class="left">
+        <div class="top">
+          <p class="org" >FaceIt</p>
+        </div>
+        <div class="pos">
+          <p><b>Junior Backend Developer</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">2w ago</li>
+          <li>Full Time</li>
+          <li>UK only</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>Backend</li>
+          <li>Junior</li>
+          <li>Ruby</li>
+          <li>RoR</li>
+        </ul>
+        <div class='removeJob'><img src='images/icon-remove.svg'></div>
+    </div>
+    <div class="jobCard" data-role="Frontend" data-level="Junior" data-languages="HTML Javascript" data-tools="Sass">
+      <div class="img">
+        <img src="images/shortly.svg" alt ="ManageSVG">
+      </div>
+      <div class="left">
+        <div class="top">
+          <p class="org" >Shortly</p>
+        </div>
+        <div class="pos">
+          <p><b>Junior Developer</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">2w ago</li>
+          <li>Full Time</li>
+          <li>Worldwide</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>Frontend</li>
+          <li>Junior</li>
+          <li>HTML</li>
+          <li>Sass</li>
+          <li>JavaScript</li>
+        </ul>
+        <div class="removeJob"><img src="images/icon-remove.svg"></div>
+    </div>
+    <div class="jobCard" data-role="Frontend" data-level="Junior" data-languages="Javascript" data-tools="Vue Sass">
+      <div class="img">
+        <img src="images/insure.svg" alt ="ManageSVG">
+      </div>
+      <div class="left">
+        <div class="top">
+          <p class="org" >Insure</p>
+        </div>
+        <div class="pos">
+          <p><b>Junior Frontend Developer</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">2w ago</li>
+          <li>Full Time</li>
+          <li>USA only</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>Frontend</li>
+          <li>Junior</li>
+          <li>Vue</li>
+          <li>Sass</li>
+          <li>JavaScript</li>
+        </ul>
+        <div class='removeJob'><img src='images/icon-remove.svg'></div>
+    </div>
+    <div class="jobCard" data-role="FullStack" data-level="Midweight" data-languages="Javascript Python" data-tools="Django">
+      <div class="img">
+        <img src="images/eyecam-co.svg" alt ="ManageSVG">
+      </div>
+      <div class="left">
+        <div class="top">
+          <p class="org" >EyeCam Co.</p>
+        </div>
+        <div class="pos">
+          <p><b>FullStack Engineer</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">3w ago</li>
+          <li>Full Time</li>
+          <li>Worldwide</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>FullStack</li>
+          <li>Midweight</li>
+          <li>JavaScript</li>
+          <li>Django</li>
+          <li>Python</li>
+        </ul>
+        <div class='removeJob'><img src='images/icon-remove.svg'></div>
+    </div>
+  </div>
+    <div class="jobCard" data-role="Frontend" data-level="Junior" data-languages="Javascript" data-tools="Sass React">
+      <div class="img">
+        <img src="images/the-air-filter-company.svg" alt ="ManageSVG">
+      </div>      <div class="left">
+        <div class="top">
+          <p class="org" >The Air Filter Company</p>
+        </div>
+        <div class="pos">
+          <p><b>Front-end Dev</b></p>
+        </div>
+        <ul class="details">
+          <li style="list-style: none;">1mo ago</li>
+          <li>Part Time</li>
+          <li>Worldwide</li>
+        </ul> 
+      </div>
+        <ul class="req">
+          <li>Frontend</li>
+          <li>Junior</li>
+          <li>React</li>
+          <li>Sass</li>
+          <li>JavaScript</li>
+        </ul>
+        <div class='removeJob'><img src='images/icon-remove.svg'></div>
+    </div>
+    <div id="jobInfoPopup"></div>
+    <div class="addNewJob"><img src="images/addNewJobIcon.svg" id="add"></div>
+    <div class="addJobForm">
+      <form>
+        <label>Organization Name</label><br><input type="text" id="orgName"><br>
+        <label>Job Title</label><br><input type="text" id="jobTitle"><br>
+        <label for ="jobType">Job Type</label><br><select id="jobType">
+          <option value="Full Time" id="jobType">Full Time</option><option value="Part Time" id="jobType">Part Time</option>
+        </select><br>
+        <label>Job Role</label><br><select id="role"><option value="Frontend">Frontend</option><option value="Backend">Backend</option><option value="FullStack">FullStack</option></select><br>
+        <label>Job Level</label><br><select id="level"><option value="Junior">Junior</option><option value="Midweight">Midweight</option><option value="Senior">Senior</option></select><br>
+        <label name="lang">Languages</label><br>
+        <table  style="width:100%; column-gap: 20%;"><tr><td><label>HTML</label><input type="checkbox" id="lang" value="HTML"></td><td><label>CSS</label><input type="checkbox"  name="lang" value="CSS"></td>
+        <td> <label>JavaScript</label><input type="checkbox"  id="lang" value="JavaScript"></td></tr>
+        <tr><td><label>Python</label><input type="checkbox"  id="lang" value="Python"></td><td><label>Ruby</label><input type="checkbox" id="lang" value="Ruby"></td></tr></table>
+        <label  name="tools">Tools</label><br>
+        <table  style="width:100%; column-gap: 20%;"><tr><td><label>React</label><input type="checkbox"  id="tools" value="React"></td><td><label>Sass</label><input type="checkbox"  id="tools" value="Sass"></td>
+        <td><label>Vue</label><input type="checkbox"  id="tools" value="Vue"></td></tr>
+        <tr><td><label>Django</label><input type="checkbox" id="tools" value="Django"></td>
+        <td><label>RoR(Ruby on Rails)</label><input type="checkbox"  id="tools" value="RoR"></td></tr></table>
+        <input type="submit" id="submitButton">
+      </form>
+      <div class='removeForm'><img src='images/icon-remove.svg'></div>
+    </div>
+    <div class="attribution">
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+      Coded by <a href="#">Malaika Zafar</a>.
+    </div>
+</body>
+</html>

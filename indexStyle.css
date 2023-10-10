@@ -1,0 +1,341 @@
+header{
+    width: 100%;
+   height: 156px;
+   background-image: url("images/bg-header-desktop.svg");
+}
+body{
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0%;
+    background-color: hsl(180, 52%, 96%);
+}
+
+#searchBar{
+    display:none;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: white;
+    border-style: dashed;
+    border-color: hsl(180, 29%, 50%);
+    width: 80%;
+    padding: 5%;
+}
+
+.searchItems{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: hsl(180, 52%, 96%);
+    color: hsl(180, 29%, 50%);
+    height: fit-content;
+    border-radius: 10%;
+    margin-left: 5px;
+}
+.searchItems .remove{
+    margin-left: 10px;
+    padding-right: 10px;
+}
+
+.jobCard{
+    display: flex;
+    background-color: white;
+    width: 80%;
+    filter: drop-shadow(0px 10px 10px hsl(180, 31%, 48%));
+    margin-top: 5%;
+}
+
+.jobCard:hover{
+    border-left: 5px hsl(180, 31%, 48%) solid;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+.top{
+    display: flex;
+    padding-top: 10px;
+}
+.org{
+    display: flex;
+    align-items: center;
+    color: hsl(180, 29%, 50%);
+}
+.newFeatured{
+    padding: 1%;
+    margin-left: 15px;
+    border-radius: 20px;
+    color:white
+}
+.details{
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    list-style: none;   
+}
+.details li{
+    margin-left: 0%;
+    color: hsl(180, 8%, 52%);
+}
+
+.left{
+    margin-left: 20px;
+    height: 70%;
+    float:left;
+}
+
+.right{
+    display: flex;
+}
+
+.req{
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 2%;
+    justify-content:right;
+    width: 100%;
+}
+
+.req li{
+    margin-left: 2%;
+    list-style: none;
+    background-color: hsl(180, 52%, 96%);
+    color: hsl(180, 29%, 50%);
+    padding: 8px;
+    border-radius: 10%;
+    height: fit-content;
+    
+}
+
+.req li:hover{
+    background-color: hsl(180, 29%, 50%);
+    color: white;
+    cursor:pointer;
+}
+.pos{
+    font-size: larger;
+    
+}
+
+.pos p:hover{
+    color:hsl(180, 29%, 50%);
+}
+
+.img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5%;
+}
+
+.attribution{
+    font-size: 11px; text-align: center;
+    margin-top: 5%;
+}
+.attribution a {
+     color: hsl(228, 45%, 44%); 
+     text-decoration-style: none;
+    }
+
+.popup{
+    position:relative;
+}
+
+.infoItem{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.infoItem h3{
+        margin-left: 20px;
+}
+
+#jobInfoPopup {
+    position: fixed;
+    top: 5%;
+    left:20%;
+    width: 60%;
+    display: none;
+    background-color: white;
+    filter: drop-shadow(0px 10px 10px hsl(180, 31%, 48%));
+}
+
+#jobInfoPopup table{
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.removePopup{
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: hsl(180, 31%, 48%);
+    padding: 2%;
+}
+
+.jobinformation{
+    padding: 2%;
+}
+
+
+#jobInfoPopup .jobinformation ul{
+    display: flex;
+    list-style: none;
+}
+
+#jobInfoPopup .jobinformation ul li{
+    margin: 4%;
+}
+
+.addNewJob{
+   width: 85%;
+}
+
+#add{
+    width: 5%;
+    border-radius: 100%;
+    float: right;
+}
+input[type="text"]{
+    width: 100%;
+}
+select{
+    width: 100%;
+}
+
+.removeJob{
+    margin: 2%;
+    padding:8px;
+    border-radius: 25%;
+    background-color:  hsl(180, 31%, 48%);
+    height:fit-content;
+}
+
+
+.addJobForm{
+    position: fixed;
+    top: 5%;
+    left:10%;
+    width: 50%;   
+    display: none;
+    backdrop-filter: blur();
+    background-color: white;
+    filter: drop-shadow(0px 10px 10px hsl(180, 31%, 48%));
+    border-radius: 20px;
+}
+
+.addJobForm form{
+    width:95%;
+    padding: 5%;
+    border-radius: 10%;
+}
+
+.addJobForm .removeForm{
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: hsl(180, 31%, 48%);
+    padding: 2%;
+}
+
+.addJobForm form input[type="text"], select
+{
+    border-color: hsl(180, 64%, 81%);
+    filter: drop-shadow(0px 2px 2px hsl(180, 21%, 48%));
+    margin-top: 2%;
+}
+
+.addJobForm form input[type="submit"]
+{
+    padding: 2%;
+    background-color:hsl(180, 31%, 48%);;
+    filter: drop-shadow(0px 2px 2px hsl(180, 21%, 48%));
+    border-radius: 20px;
+}
+
+
+
+
+@media only screen and (max-width:376px) {
+    .jobCard{
+        width:95%;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items:flex-start;
+        margin-top: 20%;
+    }
+    .img{
+        margin-top: -10%;
+    }
+    .details li{
+        margin:5px;
+    }
+    .req{
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: 3%;
+        justify-content:left;
+        align-items: center;
+        width: 100%;
+    }
+    
+    .req li{
+        margin-left: 2%;
+        margin-top: 1%;
+        list-style: none;
+        background-color: hsl(180, 52%, 96%);
+        color: hsl(180, 29%, 50%);
+        padding: 4px;
+        border-radius: 10%;
+        height: fit-content;
+        
+    }
+    #add{
+        position: sticky;
+        width: 20%;
+        margin-top: -5%;
+        margin-right: -10%;
+        border-radius: 100%;
+        float: right;
+    }
+    .addJobForm{
+        position: fixed;
+        top: 5%;
+        left:5%;
+        width: 90%;   
+        display: none;
+        backdrop-filter: blur();
+        background-color: white;
+        filter: drop-shadow(0px 10px 10px hsl(180, 31%, 48%));
+        border-radius: 20px;
+    }
+
+    #jobInfoPopup {
+        position: fixed;
+        top: 5%;
+        left:5%;
+        width: 90%;
+        display: none;
+        background-color: white;
+        filter: drop-shadow(0px 10px 10px hsl(180, 31%, 48%));
+    }
+
+    #jobInfoPopup h2{
+        font-size: 15px;
+    }
+    #jobInfoPopup h3
+    {
+        font-size: 10px;
+    }
+
+    header{
+        width: 100%;
+       height: 156px;
+       background-image: url("images/bg-header-mobile.svg");
+    }
+}
